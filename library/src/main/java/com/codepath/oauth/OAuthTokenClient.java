@@ -34,12 +34,17 @@ public class OAuthTokenClient {
         this.apiInstance = apiInstance;
         this.handler = handler;
         if (callbackUrl == null) { callbackUrl = OAuthConstants.OUT_OF_BAND; };
-        this.service = new ServiceBuilder()
+
+        ServiceBuilder builder = new ServiceBuilder()
                 .apiKey(consumerKey)
                 .apiSecret(consumerSecret).callback(callbackUrl)
-                .httpClientConfig(OkHttpHttpClientConfig.defaultConfig())
-                .scope(scope) // OAuth2 requires scope
-                .build(apiInstance);
+                .httpClientConfig(OkHttpHttpClientConfig.defaultConfig());
+
+        if (scope != null) {
+            builder.scope(scope);
+        }
+
+        this.service = builder.build(apiInstance);
     }
 
     // Get a request token and the authorization url
