@@ -14,10 +14,10 @@ ext {
 
     POM_ARTIFACT_ID = "android-oauth-handler"
     POM_NAME = "CodePath OAuth Handler"
-    POM_URL = "https://github.com/codepath/android-oauth-handler/"
-    POM_SCM_URL = "https://github.com/codepath/android-oauth-handler/"
-    POM_SCM_CONNECTION = "scm:git:https://github.com/codepath/android-oauth-handler.git"
-    POM_SCM_DEV_CONNECTION = "scm:git:git@github.com:codepath/android-oauth-handler.git"
+    POM_URL = "https://github.com/psalva/android-oauth-handler/"
+    POM_SCM_URL = "https://github.com/psalva/android-oauth-handler/"
+    POM_SCM_CONNECTION = "scm:git:https://github.com/psalva/android-oauth-handler.git"
+    POM_SCM_DEV_CONNECTION = "scm:git:git@github.com:psalva/android-oauth-handler.git"
 
     POM_LICENCE_NAME = "The Apache Software License, Version 2.0"
     POM_LICENCE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
