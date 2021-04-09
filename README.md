@@ -1,4 +1,4 @@
-# CodePath OAuth Handler [![Build Status](https://travis-ci.org/codepath/android-oauth-handler.svg?branch=master)](https://travis-ci.org/codepath/android-oauth-handler)
+# CodePath OAuth Handler 
 
 This library is an Android library for managing OAuth requests with an extremely easy
 approach that keeps the details of the OAuth process abstracted from the end-user developer.
@@ -24,13 +24,10 @@ Next, add this line to your `app/build.gradle` file:
 
 ```gradle
 dependencies {
-    compile 'com.codepath.libraries:android-oauth-handler:2.1.3'
+    implementation 'com.github.psalva:android-oauth-handler:$latest_version'
 }
 ```
 
-If you want an easier way to get setup with this library, try downloading the
-[android-rest-client-template](https://github.com/thecodepath/android-rest-client-template/archive/master.zip)
-instead and using that as the template for your project.
 
 ## Getting Started
 
@@ -92,27 +89,6 @@ If the manifest does not have a matching `intent-filter` then the OAuth flow wil
 
 The above instructions cover most OAuth integrations. When using this template to build a Twitter integration, you will need to make a few changes.
 
-In `AndroidManifest.xml`, use the OAuth scheme name `x-oauthflow-twitter`:
-
-```xml
-<activity ...>
-  <intent-filter ...>
-      <data
-          android:scheme="x-oauthflow-twitter"
-          android:host="arbitraryname.com"
-      />
-  </intent-filter>
-</activity>
-```
-
-In `TwitterClient.java`, the value for `REST_CALLBACK_URL` must also use the `x-oauthflow-twitter` protocol.
-
-```java
-  public static final String REST_CALLBACK_URL = "x-oauthflow-twitter://arbitraryname.com";
-```
-
-Note that the `arbitraryname.com` value can be any string. If you leave the setting unchecked for callback locking in your Twitter developer settings, then you can use any placeholder value. The callback host value in `AndroidManifest.xml` must correspond to the part after the `://` in `REST_CALLBACK_URL`, but it need not match the setting in your Twitter developer settings page.
-
 ### Creating a LoginActivity
 
 The next step to add support for authenticating with a service is to create a `LoginActivity` which is responsible for the task:
@@ -160,39 +136,6 @@ A few notes for your `LoginActivity`:
 In more advanced cases where you want to authenticate **multiple services from a single activity**, check out the related
 [guide for using OAuthLoginFragment](https://github.com/thecodepath/android-oauth-handler/wiki/Advanced-Use-with-OAuthLoginFragment).
 
-### Using the REST Client
-
-These endpoint methods will automatically execute asynchronous requests signed with the authenticated access token anywhere your application. To use JSON endpoints, simply invoke the method
-with a `JsonHttpResponseHandler` handler:
-
-```java
-// SomeActivity.java
-RestClient client = RestClientApp.getRestClient();
-client.getHomeTimeline(1, new JsonHttpResponseHandler() {
-  public void onSuccess(int statusCode, Headers headers, JSON json) {
-    // Response is automatically parsed into a JSONArray
-    // json.jsonArray.getJSONObject(0).getLong("id");
-  }
-});
-```
-
-Based on the JSON response (array or object), you need to declare the expected type inside the `onSuccess` signature i.e `public void onSuccess(int statusCode, Header[] headers, JSONObject json)`. If the endpoint does not return JSON, then you can use the `AsyncHttpResponseHandler`:
-
-```java
-RestClient client = RestClientApp.getRestClient();
-client.get("http://www.google.com", new JsonHttpResponseHandler() {
-    @Override
-    public void onSuccess(int statusCode, Headers headers, String response) {
-        System.out.println(response);
-    }
-});
-```
-
-Check out [Android Async HTTP Docs](https://github.com/codepath/asynchttpclient) for more request creation details.
-
-## Extra Functionality
-
-
 ### Access Authorization
 
 Once the request token has been received, an access token is granted by redirecting to the device's browser to allow the user to grant permission on the API provider's web address. The browser is opened using an implicit intent with no intent flags specified:
@@ -222,27 +165,3 @@ RestClient client = RestApplication.getRestClient();
 client.clearAccessToken();
 ```
 
-### Debugging
-
-In order to [troubleshoot API calls](http://guides.codepath.com/android/Troubleshooting-API-calls), you can take advantage of the Stetho library:
-
-Next, initialize Stetho inside your Application object:
-```java
-public class MyApplication extends Application {
-  public void onCreate() {
-    super.onCreate();
-    Stetho.initializeWithDefaults(this);
-  }
-}
-```
-
-Edit the manifest.xml file in your project. To let the Android operating system know that you have a custom Application class, add an attribute called  `android:name`  to the manifest’s application tag and set the value to the name of your custom Application class.
-```xml
- <application
-    ...
-    android:name=".MyApplication"
-    ...
-    >
-```
-
-You can then use `chrome://inspect`, pick the app currently running, and click on the Network tab to view.  See [this guide](https://github.com/codepath/android_guides/wiki/Debugging-with-Stetho) for more context.
