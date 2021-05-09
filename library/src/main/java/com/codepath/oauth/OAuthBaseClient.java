@@ -103,7 +103,9 @@ public abstract class OAuthBaseClient {
 
             @Override
             public void onFailure(Exception e) {
-                accessHandler.onLoginFailure(e);
+                if (accessHandler != null) {
+                    accessHandler.onLoginFailure(e);
+                }
             }
 
         });
@@ -123,14 +125,15 @@ public abstract class OAuthBaseClient {
     public void instantiateClient(String consumerKey, String consumerSecret, Token token) {
 
         if (token instanceof OAuth1AccessToken) {
-            client = OAuthAsyncHttpClient.create(consumerKey, consumerSecret, (OAuth1AccessToken)(token));
-        } else if (token instanceof OAuth2AccessToken){
+            client = OAuthAsyncHttpClient.create(consumerKey, consumerSecret, (OAuth1AccessToken) (token));
+        } else if (token instanceof OAuth2AccessToken) {
             client = OAuthAsyncHttpClient.create((OAuth2AccessToken) token);
         } else {
             throw new IllegalStateException("unrecognized token type" + token);
         }
 
     }
+
     // Fetches a request token and retrieve and authorization url
     // Should open a browser in onReceivedRequestToken once the url has been received
     public void connect() {
@@ -167,7 +170,8 @@ public abstract class OAuthBaseClient {
     }
 
     // Returns the request token stored during the request token phase (OAuth1 only)
-    protected @Nullable Token getOAuth1RequestToken() {
+    protected @Nullable
+    Token getOAuth1RequestToken() {
         int oAuthVersion = prefs.getInt(OAuthConstants.VERSION, 0);
 
         if (oAuthVersion == 1) {
